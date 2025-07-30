@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AsyncAlgorithms
 
 var sampleInt: [Event] = [
     .init(id: 0, time:  0, color: .red, value: .int(1)),
@@ -23,9 +24,26 @@ var sampleString: [Event] = [
     .init(id: 100_4, time:  7.5, value: .string("e")),
 ]
 
+func runMerge(_ events1: [Event], _ events2: [Event]) async -> [Event] {
 
+    var result: [Event] = []
+
+    let merged = await merge(
+        events1.makeStream(),
+        events2.makeStream()
+    )
+
+    for await event in merged {
+        result.append(event)
+    }
+
+    return result
+
+}
 
 struct ContentView: View {
+
+    @State var result: [Event]? = nil
 
     var duration: TimeInterval {
         max(sampleInt.last!.time, sampleString.last!.time)
@@ -33,11 +51,17 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
+
             TimelineView(events: sampleInt, duration: duration)
 
             TimelineView(events: sampleString, duration: duration)
+
+            TimelineView(events: result ?? [], duration: duration)
         }
         .padding(20)
+        .task {
+            result = await runMerge(sampleInt, sampleString)
+        }
     }
 }
 

@@ -8,6 +8,7 @@
 import Foundation
 
 extension Array where Element  == Event {
+    @MainActor
     func makeStream() -> AsyncStream<Event> {
         AsyncStream { continuation in
 
