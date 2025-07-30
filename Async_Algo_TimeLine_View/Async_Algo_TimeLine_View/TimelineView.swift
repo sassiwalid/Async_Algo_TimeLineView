@@ -13,20 +13,37 @@ struct TimelineView: View {
 
     var body: some View {
         GeometryReader { proxy in
-            Color.clear
             ZStack(alignment: .leading) {
+                Rectangle()
+                    .fill(Color.secondary)
+                    .frame(height: 1)
+
+                ForEach(0..<Int(duration.rounded(.up))) { tick in
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundStyle(.secondary)
+                        .alignmentGuide(.leading) { _ in
+                            let relativeTime = CGFloat(tick) / duration
+
+                            return -(proxy.size.width-30) * CGFloat(relativeTime)
+                        }
+
+                }
+                .offset(x: 15)
+
                 ForEach(events) { event in
                     event.value.frame(width: 30, height: 30)
                         .background {
                             Circle().fill(event.color)
                         }
-                        .alignmentGuide(.leading) { dim in
+                        .alignmentGuide(.leading) { _ in
                             let relativeTime = event.time / duration
+
                             return -(proxy.size.width-30) * CGFloat(relativeTime)
                         }
                 }
             }
         }
-        .frame(height: 50)
+        .frame(height: 30)
     }
 }

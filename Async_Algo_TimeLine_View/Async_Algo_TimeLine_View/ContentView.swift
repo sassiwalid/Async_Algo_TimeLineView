@@ -37,7 +37,7 @@ struct ContentView: View {
 
             TimelineView(events: sampleString, duration: duration)
         }
-        .padding()
+        .padding(20)
     }
 }
 
