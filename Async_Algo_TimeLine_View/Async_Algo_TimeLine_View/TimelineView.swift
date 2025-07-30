@@ -22,6 +22,7 @@ struct TimelineView: View {
                     Rectangle()
                         .frame(width: 1)
                         .foregroundStyle(.secondary)
+                        .allowsHitTesting(false)
                         .alignmentGuide(.leading) { _ in
                             let relativeTime = CGFloat(tick) / duration
 
@@ -36,14 +37,16 @@ struct TimelineView: View {
                         .background {
                             Circle().fill(event.color)
                         }
+                        .help("Time: \(String(format: "%.1f", event.time))s")
                         .alignmentGuide(.leading) { _ in
                             let relativeTime = event.time / duration
 
                             return -(proxy.size.width-30) * CGFloat(relativeTime)
                         }
+
                 }
             }
         }
-        .frame(height: 30)
+        .frame(height: 50)
     }
 }
