@@ -26,18 +26,12 @@ var sampleString: [Event] = [
 
 func runMerge(_ events1: [Event], _ events2: [Event]) async -> [Event] {
 
-    var result: [Event] = []
-
     let merged = await merge(
         events1.makeStream(),
         events2.makeStream()
     )
 
-    for await event in merged {
-        result.append(event)
-    }
-
-    return result
+    return await Array(merged)
 
 }
 
