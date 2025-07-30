@@ -40,6 +40,7 @@ struct ContentView: View {
     @State var result: [Event]? = nil
     @State var sample1 = sampleInt
     @State var sample2 = sampleString
+    @State private var loading = false
 
     var duration: TimeInterval {
         max(sampleInt.last!.time, sampleString.last!.time)
@@ -53,10 +54,16 @@ struct ContentView: View {
             TimelineView(events: $sample2, duration: duration)
 
             TimelineView(events: .constant(result ?? []), duration: duration)
+                .drawingGroup()
+                .opacity(loading ? 0.5 : 1)
+                .animation(.default, value: result)
+
         }
         .padding(20)
-        .task {
-            result = await runMerge(sampleInt, sampleString)
+        .task(id: sample1 + sample2) {
+            loading = true
+            result = await runMerge(sample1, sample2)
+            loading = false
         }
     }
 }
