@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TimelineView: View {
-    var events: [Event]
+    @Binding var events: [Event]
     var duration: TimeInterval
 
     var body: some View {
@@ -32,17 +32,17 @@ struct TimelineView: View {
                 }
                 .offset(x: 15)
 
-                ForEach(events) { event in
-                    event.value.frame(width: 30, height: 30)
-                        .background {
-                            Circle().fill(event.color)
-                        }
-                        .help("Time: \(String(format: "%.1f", event.time))s")
-                        .alignmentGuide(.leading) { _ in
-                            let relativeTime = event.time / duration
+                ForEach($events) { $event in
+                    EventNode(
+                        event: $event,
+                        secondsPerPoints: duration / (proxy.size.width - 30)
+                    )
+                    .help("Time: \(String(format: "%.1f", event.time))s")
+                    .alignmentGuide(.leading) { _ in
+                        let relativeTime = event.time / duration
 
-                            return -(proxy.size.width-30) * CGFloat(relativeTime)
-                        }
+                        return -(proxy.size.width-30) * CGFloat(relativeTime)
+                    }
 
                 }
             }

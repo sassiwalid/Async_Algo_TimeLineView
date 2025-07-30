@@ -38,6 +38,8 @@ func runMerge(_ events1: [Event], _ events2: [Event]) async -> [Event] {
 struct ContentView: View {
 
     @State var result: [Event]? = nil
+    @State var sample1 = sampleInt
+    @State var sample2 = sampleString
 
     var duration: TimeInterval {
         max(sampleInt.last!.time, sampleString.last!.time)
@@ -46,11 +48,11 @@ struct ContentView: View {
     var body: some View {
         VStack {
 
-            TimelineView(events: sampleInt, duration: duration)
+            TimelineView(events: $sample1, duration: duration)
 
-            TimelineView(events: sampleString, duration: duration)
+            TimelineView(events: $sample2, duration: duration)
 
-            TimelineView(events: result ?? [], duration: duration)
+            TimelineView(events: .constant(result ?? []), duration: duration)
         }
         .padding(20)
         .task {
