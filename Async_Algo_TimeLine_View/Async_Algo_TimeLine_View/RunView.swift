@@ -26,9 +26,9 @@ var sampleString: [Event] = [
 
 func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> [Event] {
 
-    let speedFcator: CGFloat = 10
-    let stream1 = await events1.makeStream(speedFactor: speedFcator)
-    let stream2 = await events2.makeStream(speedFactor: speedFcator)
+    let speedFactor: CGFloat = 10
+    let stream1 = await events1.makeStream(speedFactor: speedFactor)
+    let stream2 = await events2.makeStream(speedFactor: speedFactor)
 
 
     switch algorithm {
@@ -44,7 +44,7 @@ func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> 
         let startDate = Date()
 
         for await event in chain(stream1,stream2) {
-            let interval = Date().timeIntervalSince(startDate)
+            let interval = Date().timeIntervalSince(startDate) * speedFactor
 
             result.append(
                 Event(
