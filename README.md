@@ -49,6 +49,7 @@ Async Algorithms Timeline View is a **modern SwiftUI application** that provides
 <td><img src="screenshots/chain-demo.png" width="400" alt="Chain Algorithm Demo"/></td>
 </tr>
 <tr>
+<td align="center"><b>Welcome screen</b></td>   
 <td align="center"><b>Merge Algorithm Visualization</b></td>
 <td align="center"><b>Chain Algorithm Visualization</b></td>
 </tr>
@@ -64,8 +65,8 @@ Async Algorithms Timeline View is a **modern SwiftUI application** that provides
 
 ### Clone & Run
 ```bash
-git clone https://github.com/sassiwalid/async-algo-timeline-view.git
-cd async-algo-timeline-view
+git clone https://github.com/sassiwalid/Async_Algo_TimeLineView.git
+cd Async_Algo_TimeLineView
 open Async_Algo_Timeline_View.xcodeproj
 ```
 
