@@ -13,21 +13,22 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
 
-            List(Algorithm.allCases, selection: $selectedAlgorithm) { algo in
-                NavigationLink(algo.rawValue, value: algo)
-            }
-            .navigationTitle("Algorithms")
+            Sidebar(selectedAlgorithm: $selectedAlgorithm)
         } detail: {
             if let selectedAlgorithm = selectedAlgorithm {
                 RunView(algorithm: selectedAlgorithm)
+
             } else {
-                Text("Choose one algorithm")
-                    .font(.title2)
-                    .foregroundColor(.secondary)
+                WelcomeView()
             }
         }
+        .preferredColorScheme(.dark)
+        .navigationTitle("")
+
     }
 }
+
+
 
 #Preview {
     ContentView()
