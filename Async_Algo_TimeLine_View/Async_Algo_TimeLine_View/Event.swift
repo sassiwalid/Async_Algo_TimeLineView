@@ -27,7 +27,7 @@ extension Value: View {
     }
 }
 
-struct Event: Identifiable, Hashable, Sendable {
+struct Event: Identifiable, Hashable, Sendable, Comparable {
 
     var id: Int
 
@@ -36,6 +36,10 @@ struct Event: Identifiable, Hashable, Sendable {
     var color: Color = .green
 
     var value: Value
+
+    static func < (lhs: Event, rhs: Event) -> Bool {
+        lhs.time < rhs.time
+    }
 
 }
 

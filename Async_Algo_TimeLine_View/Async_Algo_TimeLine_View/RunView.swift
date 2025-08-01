@@ -27,9 +27,10 @@ var sampleString: [Event] = [
 func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> [Event] {
 
     let speedFactor: CGFloat = 10
-    let stream1 = await events1.makeStream(speedFactor: speedFactor)
-    let stream2 = await events2.makeStream(speedFactor: speedFactor)
 
+    let stream1 = await events1.makeStream(speedFactor: speedFactor)
+
+    let stream2 = await events2.makeStream(speedFactor: speedFactor)
 
     switch algorithm {
     case .merge:
@@ -72,7 +73,7 @@ struct RunView: View {
     var algorithm: Algorithm
 
     var duration: TimeInterval {
-        max(sampleInt.last!.time, sampleString.last!.time)
+        (sample1 + sample2 + (result ?? [])).lazy.map { $0.time }.max() ?? 0
     }
 
     var body: some View {

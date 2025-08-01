@@ -12,12 +12,14 @@ extension Array where Element  == Event {
     func makeStream(speedFactor: Double) -> AsyncStream<Event> {
         AsyncStream { continuation in
 
-            for event in self {
+            let events = sorted()
+
+            for event in events {
                 Timer.scheduledTimer(withTimeInterval: event.time / speedFactor, repeats: false) { _ in
 
                     continuation.yield(event)
 
-                    if event == last {
+                    if event == events.last {
                         continuation.finish()
                     }
                 }

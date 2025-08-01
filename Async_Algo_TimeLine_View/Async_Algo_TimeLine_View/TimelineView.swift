@@ -18,7 +18,7 @@ struct TimelineView: View {
                     .fill(Color.secondary)
                     .frame(height: 1)
 
-                ForEach(0..<Int(duration.rounded(.up))) { tick in
+                ForEach(0..<Int(duration.rounded(.up)), id: \.self) { tick in
                     Rectangle()
                         .frame(width: 1)
                         .foregroundStyle(.secondary)
