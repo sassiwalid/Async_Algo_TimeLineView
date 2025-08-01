@@ -26,22 +26,38 @@ var sampleString: [Event] = [
 
 func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> [Event] {
 
+    let speedFcator: CGFloat = 10
+    let stream1 = await events1.makeStream(speedFactor: speedFcator)
+    let stream2 = await events2.makeStream(speedFactor: speedFcator)
+
+
     switch algorithm {
     case .merge:
-        let merged = await merge(
-            events1.makeStream(),
-            events2.makeStream()
+        let merged =  merge(
+            stream1,stream2
         )
 
         return await Array(merged)
 
     case .chain:
-        let chained = await chain(
-            events1.makeStream(),
-            events2.makeStream()
-        )
+        var result = [Event]()
+        let startDate = Date()
 
-        return await Array(chained)
+        for await event in chain(stream1,stream2) {
+            let interval = Date().timeIntervalSince(startDate)
+
+            result.append(
+                Event(
+                    id: event.id,
+                    time: interval,
+                    color: event.color,
+                    value: event.value
+                )
+            )
+
+        }
+
+        return result
 
     }
 

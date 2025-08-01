@@ -9,11 +9,12 @@ import Foundation
 
 extension Array where Element  == Event {
     @MainActor
-    func makeStream() -> AsyncStream<Event> {
+    func makeStream(speedFactor: Double) -> AsyncStream<Event> {
         AsyncStream { continuation in
 
             for event in self {
-                Timer.scheduledTimer(withTimeInterval: event.time, repeats: false) { _ in
+                Timer.scheduledTimer(withTimeInterval: event.time / speedFactor, repeats: false) { _ in
+
                     continuation.yield(event)
 
                     if event == last {
