@@ -79,18 +79,27 @@ struct RunView: View {
     var body: some View {
         VStack {
 
-            TimelineView(events: $sample1, duration: duration)
+            TimelineView(
+                events: $sample1,
+                duration: duration
+            )
 
-            TimelineView(events: $sample2, duration: duration)
+            TimelineView(
+                events: $sample2,
+                duration: duration
+            )
 
-            TimelineView(events: .constant(result ?? []), duration: duration)
-                .drawingGroup()
-                .opacity(loading ? 0.5 : 1)
-                .animation(.default, value: result)
+            TimelineView(
+                events: .constant(result ?? []),
+                duration: duration
+            )
+            .drawingGroup()
+            .opacity(loading ? 0.5 : 1)
+            .animation(.default, value: result)
 
         }
         .padding(20)
-        .task(id: "\(algorithm.rawValue)-\(sample1.count)-\(sample2.count)") {
+        .task(id: "\(algorithm.rawValue)-\(sample1.hashValue)-\(sample2.hashValue)") {
             loading = true
             result = await run(
                 algorithm: algorithm,
