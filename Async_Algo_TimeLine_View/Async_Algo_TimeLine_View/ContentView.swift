@@ -8,14 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedAlgorithm: Algorithm?
+
     var body: some View {
-        NavigationStack {
-            List(Algorithm.allCases) { algo in
-                NavigationLink(algo.rawValue) {
-                    RunView(algorithm: algo)
-                }
+        NavigationSplitView {
+
+            List(Algorithm.allCases, selection: $selectedAlgorithm) { algo in
+                NavigationLink(algo.rawValue, value: algo)
             }
             .navigationTitle("Algorithms")
+        } detail: {
+            if let selectedAlgorithm = selectedAlgorithm {
+                RunView(algorithm: selectedAlgorithm)
+            } else {
+                Text("Choose one algorithm")
+                    .font(.title2)
+                    .foregroundColor(.secondary)
+            }
         }
     }
+}
+
+#Preview {
+    ContentView()
 }
