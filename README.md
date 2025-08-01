@@ -1,15 +1,11 @@
 # Async Algorithms Timeline View
 
-<div align="center">
+<div>
 
 [![Swift 6.0](https://img.shields.io/badge/Swift-6.0-orange.svg)](https://swift.org)
 [![Platforms](https://img.shields.io/badge/Platforms-iOS%2017%2B%20|%20macOS%2014%2B-lightgrey.svg)](https://developer.apple.com)
 [![Swift Testing](https://img.shields.io/badge/Testing-Swift%20Testing-blue.svg)](https://github.com/apple/swift-testing)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-
-**Interactive visualization of Swift async stream algorithms**
-
-[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Documentation](#documentation) • [Contributing](#contributing)
 
 </div>
 
@@ -48,6 +44,7 @@ Async Algorithms Timeline View is a **modern SwiftUI application** that provides
 <div align="center">
 <table>
 <tr>
+<td><img src="screenshots/welcome.png" width="400" alt="Welcome Algorithm Demo"/></td>
 <td><img src="screenshots/merge-demo.png" width="400" alt="Merge Algorithm Demo"/></td>
 <td><img src="screenshots/chain-demo.png" width="400" alt="Chain Algorithm Demo"/></td>
 </tr>
