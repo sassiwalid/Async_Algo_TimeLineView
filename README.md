@@ -1,4 +1,3 @@
-# Async Timeline View
 # Async Algorithms Timeline View
 
 <div align="center">
@@ -162,7 +161,7 @@ We welcome contributions! Please follow these steps:
 - [ ] Export to video feature in development
 - [ ] More algorithm types coming soon
 
-See [open issues](https://github.com/username/async-algo-timeline-view/issues) for a full list.
+See [open issues](https://github.com/sassiwalid/Async_Algo_TimeLineView/issues) for a full list.
 
 ## 📄 License
 
@@ -181,6 +180,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Made with ❤️ and SwiftUI**
 
-[⭐ Star this repo](https://github.com/sassiwalid/async-algo-timeline-view) • [🐛 Report Bug](https://github.com/sassiwalid/async-algo-timeline-view/issues) • [💡 Request Feature](https://github.com/sassiwalid/async-algo-timeline-view/issues)
+[⭐ Star this repo](https://github.com/sassiwalid/Async_Algo_TimeLineView) • [🐛 Report Bug](https://github.com/sassiwalid/Async_Algo_TimeLineView/issues) • [💡 Request Feature](https://github.com/sassiwalid/Async_Algo_TimeLineView/issues)
 
 </div>
