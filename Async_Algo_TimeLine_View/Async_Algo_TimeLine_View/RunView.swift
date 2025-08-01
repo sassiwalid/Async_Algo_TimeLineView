@@ -26,12 +26,24 @@ var sampleString: [Event] = [
 
 func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> [Event] {
 
-    let merged = await merge(
-        events1.makeStream(),
-        events2.makeStream()
-    )
+    switch algorithm {
+    case .merge:
+        let merged = await merge(
+            events1.makeStream(),
+            events2.makeStream()
+        )
 
-    return await Array(merged)
+        return await Array(merged)
+
+    case .chain:
+        let chained = await chain(
+            events1.makeStream(),
+            events2.makeStream()
+        )
+
+        return await Array(chained)
+
+    }
 
 }
 
@@ -61,7 +73,7 @@ struct RunView: View {
 
         }
         .padding(20)
-        .task(id: sample1 + sample2) {
+        .task(id: "\(algorithm.rawValue)-\(sample1.count)-\(sample2.count)") {
             loading = true
             result = await run(
                 algorithm: algorithm,
