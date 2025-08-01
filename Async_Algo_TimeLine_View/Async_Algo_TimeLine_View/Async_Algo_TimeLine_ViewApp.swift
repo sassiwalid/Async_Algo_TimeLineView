@@ -13,5 +13,6 @@ struct Async_Algo_TimeLine_ViewApp: App {
         WindowGroup {
             ContentView()
         }
+        .windowStyle(.hiddenTitleBar)
     }
 }
