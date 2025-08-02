@@ -25,6 +25,18 @@ Async Algorithms Timeline View is a **modern SwiftUI application** that provides
 - **Real-time timestamp recording** during operation
 - **Visual demonstration** of stream concatenation
 
+### 🤝 **Zip Algorithm**
+
+- **Synchronous pairing** of events from both streams
+- Waits for both streams to have events before emitting pairs
+- Visual demonstration of coordinated data combining
+
+### 🔄 **CombineLatest Algorithm**
+
+- **Continuous combination** of most recent values from each stream
+- Real-time updates whenever any stream emits a new event
+- Visual demonstration of live state synchronization
+
 ### 🎨 **Modern Interface**
 - **Dark theme** with beautiful gradients
 - **Glassmorphism effects** with blur backgrounds
@@ -47,11 +59,15 @@ Async Algorithms Timeline View is a **modern SwiftUI application** that provides
 <td><img src="screenshots/welcome.png" width="400" alt="Welcome Algorithm Demo"/></td>
 <td><img src="screenshots/merge-demo.png" width="400" alt="Merge Algorithm Demo"/></td>
 <td><img src="screenshots/chain-demo.png" width="400" alt="Chain Algorithm Demo"/></td>
+<td><img src="screenshots/zip-demo.png" width="400" alt="Zip Algorithm Demo"/></td>
+<td><img src="screenshots/combinelatest-demo.png" width="400" alt="CombineLatest Algorithm Demo"/></td>
 </tr>
 <tr>
 <td align="center"><b>Welcome screen</b></td>   
 <td align="center"><b>Merge Algorithm Visualization</b></td>
 <td align="center"><b>Chain Algorithm Visualization</b></td>
+<td align="center"><b>Zip Algorithm Visualization</b></td>
+<td align="center"><b>CombineLatest Algorithm Visualization</b></td>
 </tr>
 </table>
 </div>
