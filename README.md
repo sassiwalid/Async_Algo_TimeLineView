@@ -181,6 +181,16 @@ See [open issues](https://github.com/sassiwalid/Async_Algo_TimeLineView/issues) 
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
+## 🎬 Inspiration
+This project was inspired by the excellent [objc.io Swift Talk](https://www.objc.io) video series on visualizing async algorithms:
+Afficher l'image
+Key Episode:
+
+[Episode 302: Visualizing Async Algorithms - Timeline View](https://talk.objc.io/episodes/S01E302-visualizing-async-algorithms-timeline-view)
+
+
+"We transform arrays of events into async streams, run algorithms on them, and visualize the result." - objc.io
+
 ## 🙏 Acknowledgments
 
 - **Apple** for Swift Concurrency and SwiftUI
