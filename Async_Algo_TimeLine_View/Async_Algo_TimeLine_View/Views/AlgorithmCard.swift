@@ -46,7 +46,7 @@ struct AlgorithmCard: View {
             (
                 "arrow.2.circlepath",
                 "CombineLatest",
-                "Combined stream execution",
+                "Continuous combination of most recent values",
                 .brown
             )
 
