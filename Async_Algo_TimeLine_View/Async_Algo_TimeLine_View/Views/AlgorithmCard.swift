@@ -44,12 +44,11 @@ struct AlgorithmCard: View {
         case .combineLatest:
 
             (
-                "arrow.up.arrow.down.circle",
+                "arrow.2.circlepath",
                 "CombineLatest",
                 "Combined stream execution",
                 .brown
             )
-
 
         }
     }
