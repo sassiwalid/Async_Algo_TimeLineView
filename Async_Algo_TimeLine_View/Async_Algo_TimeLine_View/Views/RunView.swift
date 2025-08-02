@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AsyncAlgorithms
+import Foundation
 
 var sampleInt: [Event] = [
     .init( time:  0, color: .red, value: .int(1)),
@@ -104,7 +105,6 @@ func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> 
 }
 
 struct RunView: View {
-
     @State var result: [Event]? = nil
     @State var sample1 = sampleInt
     @State var sample2 = sampleString
@@ -116,28 +116,83 @@ struct RunView: View {
     }
 
     var body: some View {
-        VStack {
+        ScrollView {
+            VStack(spacing: 32) {
 
-            TimelineView(
-                events: $sample1,
-                duration: duration
-            )
+                algorithmHeader
 
-            TimelineView(
-                events: $sample2,
-                duration: duration
-            )
+                VStack(spacing: 24) {
+                    Text("Input Streams")
+                        .font(.title2.bold())
+                        .foregroundStyle(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-            TimelineView(
-                events: .constant(result ?? []),
-                duration: duration
-            )
-            .drawingGroup()
-            .opacity(loading ? 0.5 : 1)
-            .animation(.default, value: result)
+                    TimelineSection(
+                        title: "Stream 1",
+                        subtitle: "Numbers • \(sample1.count) events",
+                        description: "Integer values emitted over time",
+                        color: .red,
+                        icon: "1.circle.fill"
+                    ) {
+                        TimelineView(
+                            events: $sample1,
+                            duration: duration
+                        )
+                    }
 
+                    Spacer()
+                        .frame(height: 16)
+
+                    TimelineSection(
+                        title: "Stream 2",
+                        subtitle: "Letters • \(sample2.count) events",
+                        description: "String characters emitted over time",
+                        color: .green,
+                        icon: "a.circle.fill"
+                    ) {
+                        TimelineView(
+                            events: $sample2,
+                            duration: duration
+                        )
+                    }
+                }
+
+                algorithmIndicator
+
+                VStack(spacing: 20) {
+                    Text("Result Stream")
+                        .font(.title2.bold())
+                        .foregroundStyle(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    TimelineSection(
+                        title: "Output",
+                        subtitle: resultSubtitle,
+                        description: algorithm.resultDescription,
+                        color: algorithm.color,
+                        icon: "arrow.right.circle.fill",
+                        isResult: true
+                    ) {
+                        TimelineView(
+                            events: .constant(result ?? []),
+                            duration: duration
+                        )
+                        .drawingGroup()
+                        .opacity(loading ? 0.5 : 1)
+                        .animation(.default, value: result)
+                        .overlay(
+                            loadingOverlay,
+                            alignment: .center
+                        )
+                    }
+                }
+
+                if let result = result, !result.isEmpty {
+                    statisticsSection(result: result)
+                }
+            }
+            .padding(24)
         }
-        .padding(20)
         .task(id: "\(algorithm.rawValue)-\(sample1.hashValue)-\(sample2.hashValue)") {
             loading = true
             result = await run(
@@ -146,6 +201,261 @@ struct RunView: View {
                 sample2
             )
             loading = false
+        }
+    }
+
+    private var resultSubtitle: String {
+        if loading {
+            return "Processing..."
+        } else if let result = result {
+            return "\(result.count) events • \(duration)s duration"
+        } else {
+            return "Waiting for execution"
+        }
+    }
+
+    private var algorithmHeader: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 16) {
+
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(algorithm.color.gradient.opacity(0.2))
+                        .frame(
+                            width: 64,
+                            height: 64
+                        )
+
+                    Image(systemName: algorithm.icon)
+                        .font(.title)
+                        .foregroundStyle(algorithm.color.gradient)
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(algorithm.rawValue.capitalized)
+                        .font(.title.bold())
+                        .foregroundStyle(.primary)
+
+                    Text(algorithm.description)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+
+                    HStack(spacing: 6) {
+                        Circle()
+                            .fill(loading ? .orange : .green)
+                            .frame(width: 6, height: 6)
+
+                        Text(loading ? "Processing" : "Ready")
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+
+                Spacer()
+            }
+
+            Text(algorithm.behaviorDescription)
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .padding(.top, 4)
+        }
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(.ultraThinMaterial)
+                .strokeBorder(
+                    algorithm.color.opacity(0.3),
+                    lineWidth: 1
+                )
+        )
+    }
+
+    private var algorithmIndicator: some View {
+        HStack {
+            Rectangle()
+                .fill(.secondary.opacity(0.3))
+                .frame(height: 1)
+
+            VStack(spacing: 8) {
+                Image(systemName: algorithm.icon)
+                    .font(.title2)
+                    .foregroundStyle(algorithm.color.gradient)
+                    .padding(12)
+                    .background(
+                        Circle()
+                            .fill(algorithm.color.opacity(0.1))
+                            .strokeBorder(algorithm.color.opacity(0.3), lineWidth: 1)
+                    )
+
+                Text(algorithm.rawValue.uppercased())
+                    .font(.caption2.bold())
+                    .foregroundStyle(algorithm.color)
+            }
+
+            Rectangle()
+                .fill(.secondary.opacity(0.3))
+                .frame(height: 1)
+        }
+        .padding(.vertical, 20)
+    }
+
+    private var loadingOverlay: some View {
+        Group {
+            if loading {
+                VStack(spacing: 12) {
+                    ProgressView()
+                        .scaleEffect(1.2)
+
+                    Text("Executing \(algorithm.rawValue)...")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(20)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.ultraThinMaterial)
+                )
+            }
+        }
+    }
+
+    private func statisticsSection(result: [Event]) -> some View {
+        VStack(spacing: 16) {
+            Text("Execution Statistics")
+                .font(.title3.bold())
+                .foregroundStyle(.primary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            HStack(spacing: 16) {
+                StatCard(
+                    title: "Total Events",
+                    value: "\(result.count)",
+                    color: .blue,
+                    icon: "number.circle"
+                )
+
+                StatCard(
+                    title: "Duration",
+                    value: "\(duration)s",
+                    color: .green,
+                    icon: "clock"
+                )
+
+                StatCard(
+                    title: algorithm.statTitle,
+                    value: algorithm.statValue(input1: sample1, input2: sample2, result: result),
+                    color: algorithm.color,
+                    icon: algorithm.icon
+                )
+            }
+        }
+        .padding(.top, 8)
+    }
+}
+
+// MARK: - Algorithm Extensions
+extension Algorithm {
+    var icon: String {
+        return switch self {
+        case .merge: "arrow.triangle.merge"
+        case .chain: "link"
+        case .zip: "arrow.up.arrow.down.circle"
+        case .combineLatest: "arrow.2.circlepath"
+        }
+    }
+
+    var color: Color {
+        return switch self {
+        case .merge: .blue
+        case .chain: .purple
+        case .zip: .red
+        case .combineLatest: .brown
+        }
+    }
+
+    var description: String {
+        return switch self {
+        case .merge: 
+            "Time-based merging of multiple async streams"
+        case .chain: 
+            "Sequential execution of async streams"
+        case .zip: 
+            "Synchronous pairing of events from both streams"
+        case .combineLatest: 
+            "Continuous combination of most recent values"
+        }
+    }
+
+    var behaviorDescription: String {
+        return switch self {
+        case .merge:
+            "Events from both streams are combined while preserving their original timestamps, creating a naturally interleaved result."
+        case .chain:
+            "Stream 1 executes completely before Stream 2 begins, creating a sequential concatenation of events."
+        case .zip:
+            "Waits for both streams to emit events, then pairs them together. Stops when either stream completes."
+        case .combineLatest:
+            "Combines the latest value from each stream whenever any stream emits, maintaining current state."
+        }
+    }
+
+    var resultDescription: String {
+        return switch self {
+        case .merge:
+            "Interleaved events maintaining temporal order"
+        case .chain:
+            "All events from stream 1, then all from stream 2"
+        case .zip:
+            "Paired tuples of synchronized events"
+        case .combineLatest:
+            "Latest combinations updated on each emission"
+        }
+    }
+
+    var statTitle: String {
+        return switch self {
+        case .merge: "Interleaved"
+        case .chain: "Sequential"
+        case .zip: "Pairs"
+        case .combineLatest: "Updates"
+        }
+    }
+
+    func statValue(input1: [Event], input2: [Event], result: [Event]) -> String {
+        switch self {
+        case .merge:
+            guard result.count > 1 else { return "0%" }
+            var switches = 0
+            var lastColor: Color?
+            for event in result {
+                if let last = lastColor, last != event.color {
+                    switches += 1
+                }
+                lastColor = event.color
+            }
+            return "\(Int((Double(switches) / Double(result.count - 1)) * 100))%"
+
+        case .chain:
+            let stream1Count = input1.count
+            var correctOrder = 0
+            for (index, event) in result.enumerated() {
+                if index < stream1Count && event.color == .red {
+                    correctOrder += 1
+                } else if index >= stream1Count && event.color == .green {
+                    correctOrder += 1
+                }
+            }
+            return result.isEmpty ? "0%" : "\(Int((Double(correctOrder) / Double(result.count)) * 100))%"
+
+        case .zip:
+            return "\(min(input1.count, input2.count))"
+
+        case .combineLatest:
+            return "\(result.count)"
         }
     }
 }
