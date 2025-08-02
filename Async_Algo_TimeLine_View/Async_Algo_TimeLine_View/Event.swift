@@ -12,6 +12,8 @@ enum Value: Hashable, Sendable {
     case int(Int)
 
     case string(String)
+
+    indirect case pair(Value, Value)
 }
 
 extension Value: View {
@@ -23,13 +25,19 @@ extension Value: View {
 
         case .string(let stringValue): Text(stringValue)
 
+        case let .pair(left, right):
+            HStack(spacing:0) {
+                left
+                right
+            }
+
         }
     }
 }
 
 struct Event: Identifiable, Hashable, Sendable, Comparable {
 
-    var id: Int
+    var id: EventID = .single(UUID())
 
     var time: TimeInterval
 
@@ -41,5 +49,12 @@ struct Event: Identifiable, Hashable, Sendable, Comparable {
         lhs.time < rhs.time
     }
 
+}
+
+indirect enum EventID: Hashable, Sendable {
+
+    case single(UUID)
+
+    case pair(EventID, EventID)
 }
 

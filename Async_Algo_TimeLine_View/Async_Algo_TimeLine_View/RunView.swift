@@ -9,19 +9,19 @@ import SwiftUI
 import AsyncAlgorithms
 
 var sampleInt: [Event] = [
-    .init(id: 0, time:  0, color: .red, value: .int(1)),
-    .init(id: 1, time:  1, color: .red, value: .int(2)),
-    .init(id: 2, time:  2, color: .red, value: .int(3)),
-    .init(id: 3, time:  5, color: .red, value: .int(4)),
-    .init(id: 4, time:  8, color: .red, value: .int(5)),
+    .init( time:  0, color: .red, value: .int(1)),
+    .init(time:  1, color: .red, value: .int(2)),
+    .init(time:  2, color: .red, value: .int(3)),
+    .init(time:  5, color: .red, value: .int(4)),
+    .init(time:  8, color: .red, value: .int(5)),
 ]
 
 var sampleString: [Event] = [
-    .init(id: 100_0, time:  1.5, value: .string("a")),
-    .init(id: 100_1, time:  2.5, value: .string("b")),
-    .init(id: 100_2, time:  4.5, value: .string("c")),
-    .init(id: 100_3, time:  6.5, value: .string("d")),
-    .init(id: 100_4, time:  7.5, value: .string("e")),
+    .init(time:  1.5, value: .string("a")),
+    .init(time:  2.5, value: .string("b")),
+    .init(time:  4.5, value: .string("c")),
+    .init(time:  6.5, value: .string("d")),
+    .init(time:  7.5, value: .string("e")),
 ]
 
 func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> [Event] {
@@ -53,6 +53,28 @@ func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> 
                     time: interval,
                     color: event.color,
                     value: event.value
+                )
+            )
+
+        }
+
+        return result
+
+    case .zip:
+
+        var result = [Event]()
+
+        let startDate = Date()
+
+        for await (e1,e2) in zip(stream1,stream2) {
+            let interval = Date().timeIntervalSince(startDate) * speedFactor
+
+            result.append(
+                Event(
+                    id: .pair(e1.id, e2.id),
+                    time: interval,
+                    color: .blue,
+                    value: .pair(e1.value, e2.value)
                 )
             )
 

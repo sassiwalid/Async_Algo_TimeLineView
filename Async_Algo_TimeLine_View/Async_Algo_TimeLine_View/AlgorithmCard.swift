@@ -32,6 +32,15 @@ struct AlgorithmCard: View {
                 .purple
             )
 
+        case .zip:
+
+            (
+                "arrow.up.arrow.down.circle",
+                "Zip",
+                "Combined stream execution",
+                .red
+            )
+
         }
     }
 
