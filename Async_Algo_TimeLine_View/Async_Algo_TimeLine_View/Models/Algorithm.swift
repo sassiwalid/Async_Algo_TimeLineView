@@ -9,6 +9,7 @@ enum Algorithm: String, CaseIterable, Identifiable {
     case merge
     case chain
     case zip
+    case combineLatest
 
     var id: Self {
         self

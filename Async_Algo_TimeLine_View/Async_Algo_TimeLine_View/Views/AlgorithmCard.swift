@@ -41,6 +41,16 @@ struct AlgorithmCard: View {
                 .red
             )
 
+        case .combineLatest:
+
+            (
+                "arrow.up.arrow.down.circle",
+                "CombineLatest",
+                "Combined stream execution",
+                .brown
+            )
+
+
         }
     }
 

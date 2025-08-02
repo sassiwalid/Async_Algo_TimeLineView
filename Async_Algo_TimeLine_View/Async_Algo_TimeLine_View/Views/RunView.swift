@@ -32,8 +32,16 @@ func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> 
 
     let stream2 = await events2.makeStream(speedFactor: speedFactor)
 
+    var result = [Event]()
+
+    let startDate = Date()
+
+    var interval: TimeInterval { Date().timeIntervalSince(startDate) * speedFactor }
+
     switch algorithm {
+
     case .merge:
+
         let merged =  merge(
             stream1,stream2
         )
@@ -41,11 +49,8 @@ func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> 
         return await Array(merged)
 
     case .chain:
-        var result = [Event]()
-        let startDate = Date()
 
         for await event in chain(stream1,stream2) {
-            let interval = Date().timeIntervalSince(startDate) * speedFactor
 
             result.append(
                 Event(
@@ -62,12 +67,24 @@ func run(algorithm: Algorithm, _ events1: [Event], _ events2: [Event]) async -> 
 
     case .zip:
 
-        var result = [Event]()
-
-        let startDate = Date()
-
         for await (e1,e2) in zip(stream1,stream2) {
-            let interval = Date().timeIntervalSince(startDate) * speedFactor
+
+            result.append(
+                Event(
+                    id: .pair(e1.id, e2.id),
+                    time: interval,
+                    color: .blue,
+                    value: .pair(e1.value, e2.value)
+                )
+            )
+
+        }
+
+        return result
+
+    case .combineLatest:
+
+        for await (e1,e2) in combineLatest(stream1,stream2) {
 
             result.append(
                 Event(
